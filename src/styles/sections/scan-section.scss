@@ -1,0 +1,51 @@
+.scan-section {
+    overflow: hidden;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    &__block {
+        padding: 2.5rem;
+        height: max-content;
+        border-radius: 2.8rem;
+        background: rgba(255, 255, 255, 0.10);
+        border: 1px solid rgba(166, 132, 238, 0.25);
+        box-shadow: 0 2px 2px 0 rgba(166, 132, 238, 0.25) inset;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-width: 19rem;
+    }
+
+    &__icon {
+        margin-bottom: 2rem;
+    }
+
+    &__title {
+        font-size: 2.4rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 0.024rem;
+        margin-bottom: 1.2rem;
+        max-width: 20rem;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    &__text {
+        color: #A3A3A3;
+        font-size: 1.6rem;
+        font-style: normal;
+        font-weight: 300;
+        line-height: 1.5rem;
+        letter-spacing: 0.016rem;
+    }
+}

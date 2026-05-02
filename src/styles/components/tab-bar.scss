@@ -1,0 +1,60 @@
+.tab-bar {
+    position: fixed;
+    bottom: 2.7rem;
+    width: 100%;
+    height: max-content;
+
+    &__list {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 2.8rem;
+        background: rgba(255, 255, 255, 0.10);
+        backdrop-filter: blur(44px);
+        padding: 0.3rem;
+        border: 1px solid#fff;
+    }
+
+    &__item {
+        a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.2rem 1.7rem;
+
+            svg {
+                color: #A684EE;
+                transition: color 0.3s;
+            }
+
+        }
+
+        &.active {
+            border-radius: 2.8rem;
+            background: rgba(234, 227, 249, 0.30);
+            box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25) inset;
+
+            svg {
+                color: #2F0686;
+            }
+
+            .tab-bar {
+                &__text {
+                    color: #2F0686;
+                }
+            }
+        }
+    }
+
+    &__text {
+        color: rgba(166, 132, 238, 0.80);
+        font-size: 1.2rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1rem;
+        letter-spacing: 0.05rem;
+        transition: color 0.3s;
+    }
+}

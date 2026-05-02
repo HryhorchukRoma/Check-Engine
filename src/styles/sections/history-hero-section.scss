@@ -1,0 +1,65 @@
+.history-hero-section {
+    padding-bottom: 2rem;
+
+    &__title {
+        font-size: 2.8rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 3.2rem;
+        letter-spacing: 0.028rem;
+        background: #F7F6F6;
+        padding: 1rem 1.6rem 1.6rem;
+        margin-bottom: 1.1rem;
+    }
+
+    &__search {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1.2rem 1.6rem;
+        border-radius: 0.8rem;
+        border: 2px solid rgba(155, 139, 180, 0.50);
+        background: rgba(255, 255, 255, 0.10);
+        margin-bottom: 2.4rem;
+    }
+
+    &__search-input {
+        width: 100%;
+        height: 100%;
+        color: #909090;
+        font-size: 1.2rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.6rem;
+        letter-spacing: 0.05rem;
+    }
+
+    &__all {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.8rem;
+        border: 1px solid #9B8BB4;
+        background: var(--Background, #F4F1F8);
+        width: 100%;
+        height: 4.2rem;
+        padding: 0 1.4rem;
+        font-size: 1.4rem;
+        color: #9B8BB4;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 1.6rem;
+        letter-spacing: 0.05rem;
+    }
+
+    &__icon {
+        margin-left: auto;
+        margin-right: 0.8rem;
+    }
+
+    &__arrow {
+        margin-left: auto;
+    }
+}

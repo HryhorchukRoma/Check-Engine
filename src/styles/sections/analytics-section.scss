@@ -1,0 +1,170 @@
+ .analytics-section {
+     &__top {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: space-between;
+         padding: 1rem 1.6rem 1.6rem;
+         margin-bottom: 1.1rem;
+     }
+
+     &__title {
+         font-size: 2.8rem;
+         font-style: normal;
+         font-weight: 500;
+         line-height: 3.2rem;
+         letter-spacing: 0.028rem;
+         background: #F7F6F6;
+
+     }
+
+     &__exel {
+         font-size: 1.8rem;
+         font-style: normal;
+         font-weight: 700;
+         line-height: 2rem;
+         letter-spacing: 0.018rem;
+         border-radius: 0.8rem;
+         background: rgba(255, 255, 255, 0.10);
+         box-shadow: 0 2px 4px 0 rgba(166, 132, 238, 0.25) inset;
+         width: 10.8rem;
+         height: 3.7rem;
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: center;
+         gap: 0.7rem;
+     }
+
+     &__tabs {
+         display: flex;
+         width: 100%;
+         border-radius: 1.6rem;
+         border: 1px solid rgba(234, 227, 249, 0.80);
+         background: rgba(255, 255, 255, 0.10);
+         box-shadow: 0 1px 2px 0 rgba(166, 132, 238, 0.05) inset;
+         padding: 0.5rem;
+         gap: 2.5rem;
+         margin-bottom: 4rem;
+     }
+
+     &__item {
+         flex: 1;
+         text-align: center;
+         font-size: 1.4rem;
+         font-weight: 500;
+         line-height: 2rem;
+         color: #9B8BB4;
+         padding: 0.75rem;
+         border-radius: 1.2rem;
+         transition: 0.2s;
+     }
+
+     &__item.active {
+         background: #2F0686;
+         color: #fff;
+         box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25) inset;
+     }
+
+     &__blocks {
+         display: flex;
+         flex-direction: row;
+         gap: 1.6rem;
+         align-items: center;
+         margin-bottom: 3.6rem;
+     }
+
+     &__block {
+         display: flex;
+         flex-direction: column;
+         padding-left: 1.7rem;
+         justify-content: center;
+         width: calc(100% / 2);
+         height: 10.7rem;
+         border-radius: 1.6rem;
+         border: 1px solid rgba(234, 227, 249, 0.80);
+         background: rgba(255, 255, 255, 0.10);
+         box-shadow: 0 2px 4px 0 rgba(166, 132, 238, 0.30) inset;
+         overflow: hidden;
+         position: relative;
+     }
+
+     &__circle {
+         position: absolute;
+         right: -0.5rem;
+         top: -0.5rem;
+     }
+
+     &__label {
+         color: #9B8BB4;
+         font-size: 1.4rem;
+         font-style: normal;
+         font-weight: 400;
+         line-height: 1.6rem;
+         margin-bottom: 0.6rem;
+     }
+
+     &__sum {
+         font-size: 1.7rem;
+         font-style: normal;
+         font-weight: 700;
+         line-height: 2.5rem;
+     }
+
+     &__numbers-checks {
+         display: inline-flex;
+         padding: 1.7rem;
+         justify-content: space-between;
+         align-items: center;
+         gap: 10rem;
+         width: 100%;
+         border-radius: 1.6rem;
+         border: 1px solid rgba(234, 227, 249, 0.80);
+         background: rgba(255, 255, 255, 0.10);
+         box-shadow: 0 2px 5px 0 rgba(166, 132, 238, 0.30) inset;
+         margin-bottom: 2.6rem;
+     }
+
+     &__numbers-info {
+         display: flex;
+         flex-direction: column;
+         gap: 0.5rem;
+         color: #9B8BB4;
+         font-size: 1.4rem;
+         font-style: normal;
+         font-weight: 400;
+         line-height: 1.6rem;
+
+         strong {
+             color: #1F113E;
+             font-size: 2.04rem;
+             font-style: normal;
+             font-weight: 700;
+             line-height: 3.2rem;
+         }
+     }
+
+     &__charts {
+         display: flex;
+         flex-direction: column;
+         gap: 2.6rem;
+     }
+
+     &__chart {
+         border-radius: 1.6rem;
+         border: 1px solid rgba(234, 227, 249, 0.80);
+         background: rgba(255, 255, 255, 0.10);
+         padding: 1.7rem 0 1.2rem 0;
+     }
+
+     &__chart-label {
+         color: #1F113E;
+         font-size: 1.6rem;
+         font-style: normal;
+         font-weight: 700;
+         line-height: 2rem;
+         padding-left: 2rem;
+         padding-bottom: 2rem;
+         display: block;
+     }
+ }

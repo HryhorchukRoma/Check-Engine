@@ -1,0 +1,124 @@
+.exchange-section {
+    &__title {
+        font-size: 2.8rem;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 3.2rem;
+        letter-spacing: 0.028rem;
+        background: #F7F6F6;
+        padding: 1rem 1.6rem 1.6rem;
+        margin-bottom: 3.4rem;
+    }
+
+    &__block {
+        padding: 1.9rem 1.6rem 2.5rem 1.6rem;
+        border-radius: 1.6rem;
+        background: #F5F2F9;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.12);
+        margin-bottom: 2.5rem;
+    }
+
+    &__label {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        font-family: Inter;
+        font-size: 1.8rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 2rem;
+        margin-bottom: 1.7rem;
+    }
+
+    &__icon {
+        width: 3.6rem;
+        height: 3.6rem;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__item {
+        display: flex;
+        flex-direction: row;
+        padding-top: 1rem;
+        align-items: center;
+    }
+
+    &__item:not(:first-child) {
+        padding-top: 2.5rem;
+    }
+
+    &__item:not(:last-child) {
+        border-bottom: 1px dashed #E1E1FF;
+        padding-bottom: 2.5rem;
+    }
+
+    &__flag {
+        font-size: 1.6rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1.8rem;
+        border-radius: 1.2rem;
+        border: 1px solid rgba(234, 227, 249, 0.40);
+        background: #F5F5F7;
+        padding: 1.1rem 1.2rem;
+        margin-right: 1.2rem;
+    }
+
+    &__currency {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        margin-right: auto;
+    }
+
+    &__currency-codes {
+        font-size: 1.4rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 2rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.8rem;
+
+        strong {
+            color: #9B8BB4;
+            font-size: 1.2rem;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 1.6rem;
+        }
+    }
+
+    &__currency-name {
+        color: #9B8BB4;
+        font-size: 1.2rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1.6rem;
+    }
+
+    &__input {
+        border-radius: 1.2rem;
+        border: 1px solid rgba(234, 227, 249, 0.60);
+        background: #F5F5F7;
+        padding: 0.9rem 1.3rem;
+        width: 8rem;
+        height: 3.8rem;
+
+        input {
+            text-align: end;
+            height: 100%;
+            width: 100%;
+            font-size: 1.4rem;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 2rem;
+        }
+    }
+}
