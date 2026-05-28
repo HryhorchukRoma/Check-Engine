@@ -1,0 +1,66 @@
+@use 'the-new-css-reset/css/reset.css';
+@use './utils.scss';
+@use '../components/button.scss';
+@use '../components/tab-bar.scss';
+
+* {
+  box-sizing: border-box;
+
+  &::after,
+  &::before {
+    box-sizing: border-box;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Ubuntu", sans-serif;
+  background: #F4F1F8;
+  color: #1F113E;
+}
+
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  background-color: transparent;
+  transition: opacity 0.3s;
+
+  &.loading-ended {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+a {
+  text-decoration: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+button {
+  border: none;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+
+.container {
+  padding: 0 1.6rem;
+  width: 100%;
+}
+
+.pb{
+  padding-bottom: 13rem;
+}
