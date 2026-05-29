@@ -89,18 +89,38 @@
         margin-left: 0.2rem;
     }
 
-    &__item-sale {
-        display: flex;
+    &__item-warning {
+        display: inline-flex;
         flex-direction: row;
         gap: 0.4rem;
         align-items: center;
-        padding: 0.2rem 0.6rem;
-        border-radius: 0.6rem;
-        background: #ECFDF5;
+        width: max-content;
+        padding: 0.25rem 0.7rem;
+        border-radius: 0.7rem;
+        background: #FFF4E5;
+        color: #C76A00;
+        font-size: 1.2rem;
+        font-weight: 600;
+        line-height: 1.4rem;
+    }
+
+    &__item-warning-icon {
+        width: 1.4rem;
+        height: 1.4rem;
+        background: #F59E0B;
+        color: #ffffff;
+        clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 0.25rem;
+        font-size: 0.8rem;
+        font-weight: 800;
+        line-height: 1;
     }
 
     &__item-full-sum {
-        color: #9B8BB4;
+        color: #15803D;
         text-align: right;
         justify-content: end;
         font-size: 1.4rem;
@@ -108,7 +128,13 @@
         font-weight: 400;
         line-height: 1.6rem;
         display: flex;
+        width: fit-content;
+        margin-left: auto;
         margin-bottom: 0.4rem;
+        padding: 0.15rem 0.45rem;
+        border: 1px solid rgba(34, 197, 94, 0.28);
+        border-radius: 0.5rem;
+        background: rgba(34, 197, 94, 0.07);
     }
 
     &__item-sale-sum {
@@ -186,9 +212,19 @@
         box-shadow: 0 1px 5px 0 rgba(166, 132, 238, 0.25) inset;
     }
 
-    &__save-btn{
+    &__save-btn {
         height: 5rem;
     }
+    
+    &__delete-btn {
+    height: 5rem;
+    padding: 0 1.4rem;
+    border-radius: 1.2rem;
+    background: rgba(239, 68, 68, 0.10);
+    color: #ef4444;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
 }
 
 .item-edit {

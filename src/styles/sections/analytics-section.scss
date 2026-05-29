@@ -66,31 +66,14 @@
      }
 
      &__filter {
-         border-radius: 1.2rem;
-         background: #2F0686;
-         padding: 1rem;
-         color: #FFF;
-         text-align: center;
-         font-size: 1.4rem;
-         font-weight: 600;
-         line-height: 1.6rem;
-         margin-bottom: 3rem;
-         width: 80%;
-         margin-left: auto;
-         margin-right: auto;
-         display: block;
-
-         cursor: pointer;
-         transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-
-         &:active {
-             transform: scale(0.96);
-         }
-
-         &:hover {
-             transform: scale(1.02);
-         }
-     }
+    position: relative;
+    z-index: 2500;
+    margin-bottom: 3rem;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
 
      &__item {
          flex: 1;

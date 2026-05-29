@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import "../styles/sections/products-section.scss";
 
-import SaleIcon from "../assets/icons/sale-icon.svg";
 import CloseIcon from "../assets/icons/close.svg";
 
 const EMPTY_ITEMS = [];
@@ -67,7 +66,7 @@ const normalizeItemForPatch = (item, index) => {
 
 const ProductsSection = ({
     items: initialItems = EMPTY_ITEMS,
-    inline_errors,
+    inline_errors = [],
     currency = "UAH",
     onSave,
     onItemsChange,
@@ -152,9 +151,23 @@ const ProductsSection = ({
         setSavingIndex(null);
     }
 };
+    const handleDeleteItem = (index) => {
+    const itemToDelete = items[index];
 
+    const updatedItems = items
+        .filter((_, itemIndex) => itemIndex !== index)
+        .map((item, itemIndex) => ({
+            ...item,
+            position: itemIndex + 1,
+        }));
+
+    setItems(updatedItems);
+    onItemsChange?.(updatedItems, itemToDelete?.id || null);
+    setActiveEdit(null);
+};
     const errorPositionChecker = (index) =>
-        inline_errors.some((itemIndex) => Number(itemIndex) === Number(index+1));
+    Array.isArray(inline_errors) &&
+    inline_errors.some((itemIndex) => Number(itemIndex) === Number(index + 1));
 
     return (
         <section className="products-section">
@@ -221,9 +234,9 @@ const ProductsSection = ({
                                                       </span>
 
                                                     {errorPositionChecker(index) && (
-                                                        <span className="products-section__item-sale">
-                                                          <img src={SaleIcon} alt="sale" />
-                                                          Помилка
+                                                        <span className="products-section__item-warning">
+                                                            <span className="products-section__item-warning-icon">!</span>
+                                                            Увага
                                                         </span>
                                                     )}
                                                 </div>
@@ -306,6 +319,15 @@ const ProductsSection = ({
                                                         disabled={isSaving}
                                                     >
                                                         {isSaving ? "Збереження..." : "Зберегти"}
+                                                    </button>
+
+                                                    <button
+                                                        type="button"
+                                                        className="products-section__delete-btn"
+                                                        onClick={() => handleDeleteItem(index)}
+                                                        disabled={isSaving}
+                                                    >
+                                                        Видалити
                                                     </button>
 
                                                     <button

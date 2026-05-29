@@ -1,4 +1,40 @@
 .check-exchange-section {
+    &__export-wrap {
+    position: relative;
+    z-index: 20;
+}
+
+&__export {
+    width: 100%;
+}
+
+&__export-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% + 0.8rem);
+    z-index: 100;
+    padding: 0.8rem;
+    border-radius: 1.2rem;
+    background: #ffffff;
+    border: 1px solid rgba(166, 132, 238, 0.18);
+    box-shadow: 0 1rem 2.8rem rgba(47, 6, 134, 0.22);
+
+    button {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 0.8rem;
+        color: #1f113e;
+        text-align: center;
+        font-size: 1.4rem;
+        font-weight: 600;
+
+        &:hover {
+            background: rgba(166, 132, 238, 0.12);
+            color: #2f0686;
+        }
+    }
+}
     padding-top: 1rem;
 
     &__block {

@@ -90,31 +90,39 @@ const History = () => {
 
 
   const finalReceipts = useMemo(() => {
-    const q = search.toLowerCase().trim();
+  const q = search.toLowerCase().trim();
 
-    return receipts.filter((receipt) => {
-      const receiptDate = getReceiptDate(receipt);
+  return receipts.filter((receipt) => {
+    const receiptDate = getReceiptDate(receipt);
 
-      if (!showAll && receiptDate !== today) {
-        return false;
-      }
+    if (!showAll && receiptDate !== today) {
+      return false;
+    }
 
-      if (!q) return true;
+    if (!q) return true;
 
-      const date = normalizeDate(receiptDate);
-      console.log(receipt);
-      return (
-          (receipt.store_name || "").toLowerCase().includes(q) ||
-          (receipt.store_address || "").toLowerCase().includes(q) ||
-          (receipt.total_amount || "").toLowerCase() ||
-          date.raw.includes(q) ||
-          date.day.includes(q) ||
-          date.month.includes(q) ||
-          date.year.includes(q) ||
-          date.fullText.toLowerCase().includes(q)
-      );
-    });
-  }, [receipts, search, showAll, today]);
+    const date = normalizeDate(receiptDate);
+
+    const searchableText = [
+      receipt.store_name,
+      receipt.store_address,
+      receipt.total_amount,
+      receipt.currency,
+      receipt.status,
+      receipt.items_count,
+      date.raw,
+      date.day,
+      date.month,
+      date.year,
+      date.fullText,
+    ]
+      .filter((value) => value !== undefined && value !== null)
+      .map((value) => String(value).toLowerCase())
+      .join(" ");
+
+    return searchableText.includes(q);
+  });
+}, [receipts, search, showAll, today]);
 
   const handleToggle = () => {
     setShowAll((prev) => !prev);

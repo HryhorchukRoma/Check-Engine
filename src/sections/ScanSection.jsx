@@ -13,6 +13,7 @@ const ScanSection = () => {
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("idle");
 
   const openCamera = async () => {
     try {
@@ -58,75 +59,97 @@ const ScanSection = () => {
   };
 
   const handleFileChange = async (event) => {
-    const file = event.target.files?.[0];
+  const file = event.target.files?.[0];
 
-    if (!file) return;
+  if (!file) return;
 
-    try {
-      setIsUploading(true);
+  try {
+    setIsUploading(true);
+    setUploadStatus("uploading");
 
-      const data = await receiptService.uploadReceipt(file);
+    await receiptService.uploadReceipt(file);
 
-      console.log("Файл успішно відправлено:", data);
-    } catch (error) {
-      console.log("Помилка завантаження:", error.message);
-    } finally {
-      setIsUploading(false);
-      event.target.value = "";
-    }
-  };
+    setUploadStatus("success");
 
-  return (
-    <section className="scan-section">
-      <div className="container">
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  } catch (error) {
+    console.error("Помилка завантаження:", error);
+    alert(error.message || "Не вдалося завантажити чек.");
+    setUploadStatus("idle");
+  } finally {
+    setIsUploading(false);
+    event.target.value = "";
+  }
+};
 
-        
+ return (
+  <section className="scan-section">
+    <div className="container">
+      <button
+        className="scan-section__block"
+        onClick={openFiles}
+        disabled={isUploading}
+      >
+        <span className="scan-section__icon-box">
+          {uploadStatus === "uploading" && (
+            <span className="scan-section__loader" />
+          )}
 
-        <button
-          className="scan-section__block"
-          onClick={openFiles}
-          disabled={isUploading}
-        >
-          <img className="scan-section__icon" src="/src/assets/icons/download-image.svg" alt="" />
-          <h2 className="scan-section__title">
-            {isUploading ? "Завантаження..." : "Завантажте фото"}
-          </h2>
-        </button>
+          {uploadStatus === "success" && (
+            <span className="scan-section__success">✓</span>
+          )}
 
-        {isCameraOpen && (
-          <div className="scan-section__camera">
-            <video ref={videoRef} playsInline />
-            <button onClick={takePhoto}>Зробити фото</button>
-          </div>
-        )}
+          {uploadStatus === "idle" && (
+            <img
+              className="scan-section__icon"
+              src="/src/assets/icons/download-image.svg"
+              alt=""
+            />
+          )}
+        </span>
 
-        {photo && (
-          <div className="scan-section__preview">
-            <img src={photo} alt="preview" />
-          </div>
-        )}
+        <h2 className="scan-section__title">
+          {uploadStatus === "uploading" && "Завантаження..."}
+          {uploadStatus === "success" && "Завантажено"}
+          {uploadStatus === "idle" && "Завантажте фото"}
+        </h2>
+      </button>
 
-        <canvas ref={canvasRef} style={{ display: "none" }} />
+      {isCameraOpen && (
+        <div className="scan-section__camera">
+          <video ref={videoRef} playsInline />
+          <button onClick={takePhoto}>Зробити фото</button>
+        </div>
+      )}
 
-        <input
-          ref={cameraInputRef}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          style={{ display: "none" }}
-        />
+      {photo && (
+        <div className="scan-section__preview">
+          <img src={photo} alt="preview" />
+        </div>
+      )}
 
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-        />
+      <canvas ref={canvasRef} style={{ display: "none" }} />
 
-      </div>
-    </section>
-  );
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        style={{ display: "none" }}
+      />
+
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+      />
+    </div>
+  </section>
+);
 };
 
 export default ScanSection;

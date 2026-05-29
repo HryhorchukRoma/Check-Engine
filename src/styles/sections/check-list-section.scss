@@ -1,5 +1,4 @@
 .check-list-section {
-
     &__title {
         font-size: 2rem;
         font-style: normal;
@@ -16,43 +15,176 @@
     }
 
     &__filter {
-        padding: 1rem;
-        border-radius: 1.2rem;
-        background: #2F0686;
-        color: #FFF;
-        text-align: center;
-        font-size: 1.4rem;
-        font-weight: 600;
-        line-height: 1.6rem;
-
-        cursor: pointer;
-
-        transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease;
-
-        -webkit-tap-highlight-color: transparent;
-
-        will-change: transform;
-
-        &:hover {
-            transform: scale(1.02);
-        }
-
-        &:active {
-            transform: scale(0.97);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
-            background: #24056a;
-        }
-
-        &:focus {
-            outline: none;
-        }
-        
+    position: relative;
+    z-index: 2500;
+    width: 15rem;
     }
 
     &__list {
         display: flex;
         flex-direction: column;
         gap: 1.1rem;
+        position: relative;
+        overflow: visible;
+    }
+
+    &__item {
+        position: relative;
+        z-index: 1;
+    }
+
+    &__item.menu-open {
+        z-index: 50;
+    }
+
+    &__row {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        border-radius: 0.8rem;
+        background: #EFEDF1;
+        box-shadow: 0 4px 4px 0 rgba(166, 132, 238, 0.20);
+        border: 1px solid #fff;
+    }
+
+    &__actions {
+        position: relative;
+        z-index: 60;
+        width: 2.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    &__dots {
+        width: 2.4rem;
+        height: 4.4rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+    }
+
+    &__dots span {
+        width: 0.45rem;
+        height: 0.45rem;
+        border-radius: 50%;
+        background: #2f0686;
+    }
+
+    &__link {
+        display: block;
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__link .check-section {
+        border: 0;
+        box-shadow: none;
+        background: transparent;
+        padding-left: 0.4rem;
+    }
+
+    &__menu {
+        position: absolute;
+        top: 50%;
+        left: 2.6rem;
+        min-width: 14rem;
+        padding: 0.8rem;
+        border-radius: 1.2rem;
+        background: #ffffff;
+        box-shadow: 0 0.8rem 2.4rem rgba(47, 6, 134, 0.22);
+        border: 1px solid rgba(166, 132, 238, 0.18);
+        transform: translateY(-50%);
+        z-index: 100;
+    }
+
+    &__menu-item {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        border-radius: 0.8rem;
+        color: #1f113e;
+        text-align: left;
+        font-size: 1.4rem;
+        font-weight: 500;
+    }
+
+    &__menu-item:hover {
+        background: rgba(166, 132, 238, 0.12);
+    }
+
+    &__menu-item--danger {
+        color: #ef4444;
+    }
+
+    &__modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(31, 17, 62, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    &__modal {
+        width: 100%;
+        max-width: 32rem;
+        padding: 2rem;
+        border-radius: 1.6rem;
+        background: #ffffff;
+        box-shadow: 0 1.2rem 3rem rgba(31, 17, 62, 0.22);
+        text-align: center;
+    }
+
+    &__modal-title {
+        margin-bottom: 0.8rem;
+        color: #1f113e;
+        font-size: 2rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    &__modal-text {
+        margin-bottom: 2rem;
+        color: #9b8bb4;
+        font-size: 1.4rem;
+        line-height: 1.5;
+        text-align: center;
+    }
+
+    &__modal-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    &__modal-cancel,
+    &__modal-delete {
+        width: 100%;
+        max-width: 14rem;
+        padding: 1rem;
+        border-radius: 1rem;
+        font-size: 1.4rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    &__modal-cancel {
+        background: rgba(166, 132, 238, 0.12);
+        color: #2f0686;
+    }
+
+    &__modal-delete {
+        background: #ef4444;
+        color: #ffffff;
     }
 
     &__empty-block {

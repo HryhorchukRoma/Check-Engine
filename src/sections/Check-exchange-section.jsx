@@ -17,12 +17,19 @@ const getRates = (checkId) => {
   };
 };
 
-const CheckExchangeSection = ({ checkId = "check-1", onSave, onDelete }) => {
+const CheckExchangeSection = ({
+  checkId = "check-1",
+  onSave,
+  onDelete,
+  onExport,
+}) => {
   const [rates, setRates] = useState({
     RON: "",
     EUR: "",
     USD: "",
   });
+
+  const [isExportOpen, setIsExportOpen] = useState(false);
 
   useEffect(() => {
     setRates(getRates(checkId));
@@ -62,7 +69,6 @@ const CheckExchangeSection = ({ checkId = "check-1", onSave, onDelete }) => {
           </h2>
 
           <ul className="check-exchange-section__list">
-
             <li className="check-exchange-section__item">
               <label className="check-exchange-section__field">
                 <span>lei RON</span>
@@ -70,7 +76,7 @@ const CheckExchangeSection = ({ checkId = "check-1", onSave, onDelete }) => {
                 <input
                   type="text"
                   value={rates.RON}
-                  onChange={(e) => handleChange("RON", e.target.value)}
+                  onChange={(event) => handleChange("RON", event.target.value)}
                 />
               </label>
             </li>
@@ -82,7 +88,7 @@ const CheckExchangeSection = ({ checkId = "check-1", onSave, onDelete }) => {
                 <input
                   type="text"
                   value={rates.EUR}
-                  onChange={(e) => handleChange("EUR", e.target.value)}
+                  onChange={(event) => handleChange("EUR", event.target.value)}
                 />
               </label>
             </li>
@@ -94,16 +100,16 @@ const CheckExchangeSection = ({ checkId = "check-1", onSave, onDelete }) => {
                 <input
                   type="text"
                   value={rates.USD}
-                  onChange={(e) => handleChange("USD", e.target.value)}
+                  onChange={(event) => handleChange("USD", event.target.value)}
                 />
               </label>
             </li>
-
           </ul>
         </div>
 
         <div className="check-exchange-section__buttons">
           <button
+            type="button"
             onClick={onSave}
             className="check-exchange-section__save button button--purple"
           >
@@ -111,7 +117,42 @@ const CheckExchangeSection = ({ checkId = "check-1", onSave, onDelete }) => {
             Зберегти
           </button>
 
+          <div className="check-exchange-section__export-wrap">
+            <button
+              type="button"
+              className="check-exchange-section__export button button--purple"
+              onClick={() => setIsExportOpen((prev) => !prev)}
+            >
+              Excel
+            </button>
+
+            {isExportOpen && (
+              <div className="check-exchange-section__export-menu">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onExport?.("full");
+                    setIsExportOpen(false);
+                  }}
+                >
+                  Вся інформація
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    onExport?.("items");
+                    setIsExportOpen(false);
+                  }}
+                >
+                  Лише товари
+                </button>
+              </div>
+            )}
+          </div>
+
           <button
+            type="button"
             onClick={handleDelete}
             className="check-exchange-section__delete button button--red"
           >
