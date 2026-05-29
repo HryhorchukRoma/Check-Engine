@@ -17,7 +17,7 @@ const getRates = (checkId) => {
   };
 };
 
-const CheckExchangeSection = ({ checkId = "check-1", onDelete }) => {
+const CheckExchangeSection = ({ checkId = "check-1", onSave, onDelete }) => {
   const [rates, setRates] = useState({
     RON: "",
     EUR: "",
@@ -104,7 +104,7 @@ const CheckExchangeSection = ({ checkId = "check-1", onDelete }) => {
 
         <div className="check-exchange-section__buttons">
           <button
-            onClick={handleSave}
+            onClick={onSave}
             className="check-exchange-section__save button button--purple"
           >
             <img src={SaveIcon} alt="save" />

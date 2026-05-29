@@ -1,9 +1,25 @@
+import React from "react";
 import HomeHeroSection from "../sections/HomeHeroSection";
 import ScanSection from "../sections/ScanSection";
 import CheckList from "../sections/CheckList";
-import { checks } from "../data/checks";
+import { receiptService } from "../services/checkEngineService";
+import { useEffect } from "react";
 
 const Home = () => {
+    const [checks, setChecks] = React.useState([]);
+    useEffect(() => {
+        const fetchChecks = async () => {
+            try {
+                const data = await receiptService.getReceipts();
+                setChecks(data);
+            }    
+            catch (error) {
+                console.error("Помилка при завантаженні чеків:", error);
+            }
+        };
+
+        fetchChecks();
+    }, []);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);

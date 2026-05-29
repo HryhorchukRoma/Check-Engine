@@ -14,7 +14,28 @@ const Check = () => {
     const [check, setCheck] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
+    
+    const [receiptDraft, setReceiptDraft] = useState(check);
 
+    useEffect(() => {
+        setReceiptDraft(check);
+    }, [check]);
+
+    const handleItemsChange = (updatedItems) => {
+        setReceiptDraft((prev) => ({
+            ...prev,
+            items: updatedItems,
+        }));
+    };
+
+    const handleSaveReceipt = async () => {
+        const updatedReceipt = await receiptService.updateReceipt(receiptDraft.id, {
+            ...receiptDraft,
+            items: receiptDraft.items,
+        });
+
+        setReceiptDraft(updatedReceipt);
+    };
     useEffect(() => {
         const loadCheck = async () => {
             try {
@@ -78,11 +99,12 @@ const Check = () => {
                 items={check.items || []}
                 inline_errors = {check.inline_errors}
                 currency={check.currency}
-                onSave={handleProductsSave}
+                onItemsChange={handleItemsChange}
             />
 
             <CheckExchangeSection
                 checkId={check.id}
+                onSave={handleSaveReceipt}
                 onDelete={handleDelete}
             />
         </>

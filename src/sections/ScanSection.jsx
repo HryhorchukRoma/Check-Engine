@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { receiptService } from "../services/checkEngineService";
 import "../styles/sections/scan-section.scss";
 
 const ScanSection = () => {
@@ -11,6 +12,7 @@ const ScanSection = () => {
 
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [photo, setPhoto] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const openCamera = async () => {
     try {
@@ -19,7 +21,6 @@ const ScanSection = () => {
       });
 
       streamRef.current = stream;
-
       setIsCameraOpen(true);
 
       setTimeout(() => {
@@ -30,7 +31,7 @@ const ScanSection = () => {
       }, 0);
     } catch (err) {
       console.log("Камера недоступна:", err);
-      cameraInputRef.current?.click(); 
+      cameraInputRef.current?.click();
     }
   };
 
@@ -56,27 +57,43 @@ const ScanSection = () => {
     fileRef.current?.click();
   };
 
+  const handleFileChange = async (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+
+      const data = await receiptService.uploadReceipt(file);
+
+      console.log("Файл успішно відправлено:", data);
+    } catch (error) {
+      console.log("Помилка завантаження:", error.message);
+    } finally {
+      setIsUploading(false);
+      event.target.value = "";
+    }
+  };
+
   return (
     <section className="scan-section">
       <div className="container">
 
-        <button
-          className="scan-section__block"
-          onClick={openCamera}
-        >
-          <img className="scan-section__icon" src="/src/assets/icons/scan.svg" alt="" />
-          <h2 className="scan-section__title">Скануйте чек</h2>
-        </button>
+        
 
         <button
           className="scan-section__block"
           onClick={openFiles}
+          disabled={isUploading}
         >
           <img className="scan-section__icon" src="/src/assets/icons/download-image.svg" alt="" />
-          <h2 className="scan-section__title">Завантажте фото/PDF</h2>
+          <h2 className="scan-section__title">
+            {isUploading ? "Завантаження..." : "Завантажте фото"}
+          </h2>
         </button>
 
-        {/* {isCameraOpen && (
+        {isCameraOpen && (
           <div className="scan-section__camera">
             <video ref={videoRef} playsInline />
             <button onClick={takePhoto}>Зробити фото</button>
@@ -87,7 +104,7 @@ const ScanSection = () => {
           <div className="scan-section__preview">
             <img src={photo} alt="preview" />
           </div>
-        )} */}
+        )}
 
         <canvas ref={canvasRef} style={{ display: "none" }} />
 
@@ -102,7 +119,8 @@ const ScanSection = () => {
         <input
           ref={fileRef}
           type="file"
-          accept="image/*,application/pdf"
+          accept="image/*"
+          onChange={handleFileChange}
           style={{ display: "none" }}
         />
 

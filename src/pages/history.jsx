@@ -7,10 +7,10 @@ import { receiptService } from "../services/checkEngineService.js";
 
 const History = () => {
   const [search, setSearch] = useState("");
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(true);
 
   const [receipts, setReceipts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const today = new Date().toISOString().split("T")[0];

@@ -9,11 +9,15 @@ function getBaseUrl() {
     return viteUrl || "http://127.0.0.1:8000/api/";
 }
 
+
+
 const api = axios.create({
     baseURL: getBaseUrl().replace(/\/$/, ""),
     timeout: 60000,
     withCredentials: false,
 });
+
+
 
 function cleanParams(params = {}) {
     return Object.fromEntries(
@@ -22,6 +26,8 @@ function cleanParams(params = {}) {
         })
     );
 }
+
+
 
 function normalizeAxiosError(error) {
     if (error.response) {
@@ -55,10 +61,14 @@ function normalizeAxiosError(error) {
     };
 }
 
+
+
 api.interceptors.response.use(
     (response) => response,
     (error) => Promise.reject(normalizeAxiosError(error))
 );
+
+
 
 function saveBlobAsFile(blob, filename = "receipts_export.xlsx") {
     if (typeof window === "undefined") return;
@@ -75,6 +85,8 @@ function saveBlobAsFile(blob, filename = "receipts_export.xlsx") {
 
     window.URL.revokeObjectURL(url);
 }
+
+
 
 function normalizeReceiptItem(item, index) {
     const quantity = item.quantity ?? "1.000";
@@ -100,6 +112,8 @@ function normalizeReceiptItem(item, index) {
     };
 }
 
+
+
 function normalizeReceiptPatchPayload(payload = {}) {
     const normalized = { ...payload };
 
@@ -114,6 +128,8 @@ function normalizeReceiptPatchPayload(payload = {}) {
 
     return normalized;
 }
+
+
 
 export const receiptService = {
     async uploadReceipt(file, options = {}) {
@@ -194,6 +210,8 @@ export const receiptService = {
     },
 };
 
+
+
 export const inventoryService = {
     async getInventory(filters = {}) {
         const response = await api.get("/inventory", {
@@ -220,10 +238,4 @@ export const inventoryService = {
         const response = await api.delete(`/inventory/${id}`);
         return response.data;
     },
-};
-
-export default {
-    client: api,
-    receipts: receiptService,
-    inventory: inventoryService,
-};
+}; 

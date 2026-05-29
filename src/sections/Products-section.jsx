@@ -66,11 +66,12 @@ const normalizeItemForPatch = (item, index) => {
 };
 
 const ProductsSection = ({
-                             items: initialItems = EMPTY_ITEMS,
-                             inline_errors,
-                             currency = "UAH",
-                             onSave,
-                         }) => {
+    items: initialItems = EMPTY_ITEMS,
+    inline_errors,
+    currency = "UAH",
+    onSave,
+    onItemsChange,
+                            }) => {
     const [items, setItems] = useState(initialItems);
     const [activeEdit, setActiveEdit] = useState(null);
     const [savingIndex, setSavingIndex] = useState(null);
@@ -127,35 +128,30 @@ const ProductsSection = ({
         });
     };
 
-    const handleSave = async (index) => {
-        const updatedItems = items.map((item, itemIndex) => {
-            if (itemIndex !== index) {
-                return normalizeItemForPatch(item, itemIndex);
-            }
-
-            return normalizeItemForPatch(item, itemIndex);
-        });
-
-        try {
-            setSavingIndex(index);
-            setError("");
-
-            setItems(updatedItems);
-
-            const updatedCheck = await onSave?.(updatedItems);
-
-            if (updatedCheck?.items) {
-                setItems(updatedCheck.items);
-            }
-
-            setActiveEdit(null);
-        } catch (err) {
-            console.error("Помилка збереження товару:", err);
-            setError(err.message || "Не вдалося зберегти зміни.");
-        } finally {
-            setSavingIndex(null);
+    const handleSave = (index) => {
+    const updatedItems = items.map((item, itemIndex) => {
+        if (itemIndex !== index) {
+            return item;
         }
-    };
+
+        return normalizeItemForPatch(item, itemIndex);
+    });
+
+    try {
+        setSavingIndex(index);
+        setError("");
+
+        setItems(updatedItems);
+        onItemsChange?.(updatedItems);
+
+        setActiveEdit(null);
+    } catch (err) {
+        console.error("Помилка локального збереження товару:", err);
+        setError(err.message || "Не вдалося локально зберегти зміни.");
+    } finally {
+        setSavingIndex(null);
+    }
+};
 
     const errorPositionChecker = (index) =>
         inline_errors.some((itemIndex) => Number(itemIndex) === Number(index+1));
