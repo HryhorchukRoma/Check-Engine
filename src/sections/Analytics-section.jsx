@@ -46,7 +46,6 @@ const AnalyticsSection = () => {
 
     const start = new Date(year, month, 1 + (Number(weekNumber) - 1) * 7);
     const end = new Date(year, month, Number(weekNumber) * 7);
-
     const lastDayOfMonth = new Date(year, month + 1, 0);
 
     return {
@@ -132,7 +131,9 @@ const AnalyticsSection = () => {
         ]);
 
         setAnalytics(analyticsData);
-        setReceipts(Array.isArray(receiptsData) ? receiptsData : receiptsData.results || []);
+        setReceipts(
+          Array.isArray(receiptsData) ? receiptsData : receiptsData.results || []
+        );
       } catch (err) {
         console.error(err);
         setError(err.message || "Не вдалося завантажити аналітику.");
@@ -169,6 +170,21 @@ const AnalyticsSection = () => {
     });
   }, [analytics, period]);
 
+  const receiptCountsByDate = useMemo(() => {
+    return (analytics?.by_day || []).map((item) => {
+      const date = new Date(item.date);
+      const label =
+        period === "year"
+          ? date.toLocaleDateString("uk-UA", { month: "short" })
+          : date.toLocaleDateString("uk-UA", {
+              day: "2-digit",
+              month: "2-digit",
+            });
+
+      return [label, Number(item.receipts || 0)];
+    });
+  }, [analytics, period]);
+
   const expensesByShop = useMemo(() => {
     const map = new Map();
 
@@ -182,9 +198,21 @@ const AnalyticsSection = () => {
     return Array.from(map.entries());
   }, [receipts]);
 
+  const topReceipts = useMemo(() => {
+    return [...receipts]
+      .sort((a, b) => parseAmount(b.total_amount) - parseAmount(a.total_amount))
+      .slice(0, 5)
+      .map((receipt) => ({
+        name: receipt.store_name || `Чек #${receipt.id}`,
+        y: parseAmount(receipt.total_amount),
+      }));
+  }, [receipts]);
+
   const total = parseAmount(analytics?.total_spent);
   const avg = parseAmount(analytics?.avg_receipt);
   const count = analytics?.receipts || 0;
+  const hasAnalyticsData = count > 0 && expensesByDate.length > 0;
+  const currencyLabel = receipts[0]?.currency || "lei";
 
   const exportToExcel = () => {
     const data = receipts.map((receipt) => ({
@@ -206,56 +234,109 @@ const AnalyticsSection = () => {
 
   const chartTimeOptions = {
     chart: {
-      type: "column",
+      type: "areaspline",
       backgroundColor: "transparent",
+      height: 280,
     },
-
     title: { text: "" },
-
     xAxis: {
       categories: expensesByDate.map(([key]) => key),
       lineColor: "transparent",
       tickColor: "transparent",
       labels: {
-        style: {
-          color: "#9B8BB4",
-          fontSize: "12px",
-        },
+        style: { color: "#9B8BB4", fontSize: "12px" },
         rotation: expensesByDate.length > 7 ? -45 : 0,
       },
     },
-
     yAxis: {
       title: { text: "" },
       gridLineColor: "rgba(177,152,250,0.15)",
-      labels: {
-        style: {
-          color: "#9B8BB4",
+      labels: { style: { color: "#9B8BB4" } },
+    },
+    tooltip: {
+      shared: true,
+      valueSuffix: ` ${currencyLabel}`,
+      backgroundColor: "#ffffff",
+      borderColor: "rgba(166,132,238,0.25)",
+      borderRadius: 12,
+      style: { color: "#1F113E", fontWeight: "600" },
+    },
+    plotOptions: {
+      areaspline: {
+        fillColor: {
+          linearGradient: [0, 0, 0, 260],
+          stops: [
+            [0, "rgba(177,152,250,0.45)"],
+            [1, "rgba(177,152,250,0.03)"],
+          ],
         },
+        marker: {
+          radius: 4,
+          fillColor: "#2F0686",
+          lineWidth: 2,
+          lineColor: "#ffffff",
+        },
+        lineWidth: 3,
       },
     },
-
     series: [
       {
-        name: "lei",
+        name: "Витрати",
         data: expensesByDate.map(([, value]) => value),
-        color: "#B198FA",
+        color: "#8962FC",
       },
     ],
-
     credits: { enabled: false },
+    legend: { enabled: false },
+  };
+
+  const chartCountOptions = {
+    chart: {
+      type: "column",
+      backgroundColor: "transparent",
+      height: 240,
+    },
+    title: { text: "" },
+    xAxis: {
+      categories: receiptCountsByDate.map(([key]) => key),
+      lineColor: "transparent",
+      tickColor: "transparent",
+      labels: {
+        style: { color: "#9B8BB4", fontSize: "12px" },
+      },
+    },
+    yAxis: {
+      allowDecimals: false,
+      title: { text: "" },
+      gridLineColor: "rgba(177,152,250,0.15)",
+    },
+    tooltip: {
+      pointFormat: "<b>{point.y}</b> чеків",
+      backgroundColor: "#ffffff",
+      borderRadius: 12,
+      borderWidth: 0,
+    },
+    series: [
+      {
+        name: "Чеки",
+        data: receiptCountsByDate.map(([, value]) => value),
+        color: "#42EDAF",
+        borderRadius: 6,
+      },
+    ],
+    credits: { enabled: false },
+    legend: { enabled: false },
   };
 
   const chartShopOptions = {
     chart: {
       type: "pie",
       backgroundColor: "transparent",
+      height: 280,
     },
-
     title: { text: "" },
-
     tooltip: {
-      pointFormat: "<b>{point.y:.2f} lei</b>",
+      pointFormat: `<b>{point.y:.2f} ${currencyLabel}</b>`,
       backgroundColor: "rgba(255,255,255,0.9)",
       borderRadius: 10,
       borderWidth: 0,
@@ -265,7 +346,6 @@ const AnalyticsSection = () => {
         fontWeight: "600",
       },
     },
-
     plotOptions: {
       pie: {
         borderWidth: 0,
@@ -280,10 +360,9 @@ const AnalyticsSection = () => {
         },
       },
     },
-
     series: [
       {
-        name: "lei",
+        name: currencyLabel,
         data: expensesByShop.map(([name, value], index) => ({
           name,
           y: value,
@@ -291,40 +370,81 @@ const AnalyticsSection = () => {
         })),
       },
     ],
-
     credits: { enabled: false },
   };
-const weekOptions = [
-  { value: "all", label: "Останні 7 днів" },
-  { value: "1", label: "1 тиждень" },
-  { value: "2", label: "2 тиждень" },
-  { value: "3", label: "3 тиждень" },
-  { value: "4", label: "4 тиждень" },
-];
 
-const monthOptions = [
-  { value: "all", label: "Поточний місяць" },
-  { value: "1", label: "Січень" },
-  { value: "2", label: "Лютий" },
-  { value: "3", label: "Березень" },
-  { value: "4", label: "Квітень" },
-  { value: "5", label: "Травень" },
-  { value: "6", label: "Червень" },
-  { value: "7", label: "Липень" },
-  { value: "8", label: "Серпень" },
-  { value: "9", label: "Вересень" },
-  { value: "10", label: "Жовтень" },
-  { value: "11", label: "Листопад" },
-  { value: "12", label: "Грудень" },
-];
+  const chartTopReceiptsOptions = {
+    chart: {
+      type: "bar",
+      backgroundColor: "transparent",
+      height: 260,
+    },
+    title: { text: "" },
+    xAxis: {
+      categories: topReceipts.map((item) => item.name),
+      lineColor: "transparent",
+      tickColor: "transparent",
+      labels: {
+        style: { color: "#1F113E", fontSize: "12px" },
+      },
+    },
+    yAxis: {
+      title: { text: "" },
+      gridLineColor: "rgba(177,152,250,0.15)",
+      labels: {
+        style: { color: "#9B8BB4" },
+      },
+    },
+    tooltip: {
+      pointFormat: `<b>{point.y:.2f} ${currencyLabel}</b>`,
+      backgroundColor: "#ffffff",
+      borderRadius: 12,
+      borderWidth: 0,
+    },
+    series: [
+      {
+        name: "Сума",
+        data: topReceipts.map((item) => item.y),
+        color: "#F472B6",
+        borderRadius: 6,
+      },
+    ],
+    credits: { enabled: false },
+    legend: { enabled: false },
+  };
 
-const yearOptions = [
-  { value: "all", label: "Поточний рік" },
-  ...availableYears.map((year) => ({
-    value: String(year),
-    label: String(year),
-  })),
-];
+  const weekOptions = [
+    { value: "all", label: "Останні 7 днів" },
+    { value: "1", label: "1 тиждень" },
+    { value: "2", label: "2 тиждень" },
+    { value: "3", label: "3 тиждень" },
+    { value: "4", label: "4 тиждень" },
+  ];
+
+  const monthOptions = [
+    { value: "all", label: "Поточний місяць" },
+    { value: "1", label: "Січень" },
+    { value: "2", label: "Лютий" },
+    { value: "3", label: "Березень" },
+    { value: "4", label: "Квітень" },
+    { value: "5", label: "Травень" },
+    { value: "6", label: "Червень" },
+    { value: "7", label: "Липень" },
+    { value: "8", label: "Серпень" },
+    { value: "9", label: "Вересень" },
+    { value: "10", label: "Жовтень" },
+    { value: "11", label: "Листопад" },
+    { value: "12", label: "Грудень" },
+  ];
+
+  const yearOptions = [
+    { value: "all", label: "Поточний рік" },
+    ...availableYears.map((year) => ({
+      value: String(year),
+      label: String(year),
+    })),
+  ];
+
   return (
   <section className="analytics-section">
     <div className="analytics-section__top">
@@ -423,7 +543,7 @@ const yearOptions = [
               </span>
 
               <h3 className="analytics-section__sum">
-                {total.toFixed(2)} грн
+                {total.toFixed(2)} {currencyLabel}
               </h3>
             </div>
 
@@ -437,7 +557,7 @@ const yearOptions = [
               <span className="analytics-section__label">Середній чек</span>
 
               <h3 className="analytics-section__sum">
-                {avg.toFixed(2)} грн
+                {avg.toFixed(2)} {currencyLabel}
               </h3>
             </div>
           </div>
@@ -451,29 +571,58 @@ const yearOptions = [
             <img src="/src/assets/icons/numbers-checks.svg" alt="" />
           </div>
 
-          <div className="analytics-section__charts">
-            <div className="analytics-section__chart">
-              <span className="analytics-section__chart-label">
-                Витрати за часом
-              </span>
+          {hasAnalyticsData ? (
+            <div className="analytics-section__charts">
+              <div className="analytics-section__chart">
+                <span className="analytics-section__chart-label">
+                  Динаміка витрат
+                </span>
 
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={chartTimeOptions}
-              />
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={chartTimeOptions}
+                />
+              </div>
+
+              <div className="analytics-section__chart">
+                <span className="analytics-section__chart-label">
+                  Кількість чеків
+                </span>
+
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={chartCountOptions}
+                />
+              </div>
+
+              <div className="analytics-section__chart">
+                <span className="analytics-section__chart-label">
+                  Витрати за магазинами
+                </span>
+
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={chartShopOptions}
+                />
+              </div>
+
+              <div className="analytics-section__chart">
+                <span className="analytics-section__chart-label">
+                  Найбільші чеки
+                </span>
+
+                <HighchartsReact
+                  highcharts={Highcharts}
+                  options={chartTopReceiptsOptions}
+                />
+              </div>
             </div>
-
-            <div className="analytics-section__chart">
-              <span className="analytics-section__chart-label">
-                Витрати за магазинами
-              </span>
-
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={chartShopOptions}
-              />
+          ) : (
+            <div className="analytics-section__empty">
+              <h3>Немає даних за цей період</h3>
+              <p>Завантаж чеки або вибери інший період для аналізу.</p>
             </div>
-          </div>
+          )}
         </>
       )}
     </div>

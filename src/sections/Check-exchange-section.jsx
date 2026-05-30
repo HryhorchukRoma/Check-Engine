@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/sections/check-exchange-section.scss";
 
-import SaveIcon from "../assets/icons/save.svg";
+import Button from "../components/Button";
 import DeleteIcon from "../assets/icons/delete.svg";
 
 const getRates = (checkId) => {
@@ -30,6 +30,7 @@ const CheckExchangeSection = ({
   });
 
   const [isExportOpen, setIsExportOpen] = useState(false);
+  const [saveStatus, setSaveStatus] = useState("idle");
 
   useEffect(() => {
     setRates(getRates(checkId));
@@ -49,6 +50,29 @@ const CheckExchangeSection = ({
 
     localStorage.setItem("check-rates", JSON.stringify(allChecks));
   };
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const handleSaveClick = async () => {
+  try {
+    setSaveStatus("saving");
+
+    handleSave();
+
+    await Promise.all([
+      onSave?.(),
+      wait(500),
+    ]);
+
+    setSaveStatus("saved");
+
+    setTimeout(() => {
+      setSaveStatus("idle");
+    }, 600);
+  } catch (error) {
+    console.error(error);
+    setSaveStatus("idle");
+    alert(error.message || "Не вдалося зберегти чек.");
+  }
+};
 
   const handleDelete = () => {
     const allChecks = JSON.parse(localStorage.getItem("check-rates") || "{}");
@@ -64,9 +88,7 @@ const CheckExchangeSection = ({
     <section className="check-exchange-section">
       <div className="container">
         <div className="check-exchange-section__block">
-          <h2 className="check-exchange-section__title">
-            Курси валют
-          </h2>
+          <h2 className="check-exchange-section__title">Курси валют</h2>
 
           <ul className="check-exchange-section__list">
             <li className="check-exchange-section__item">
@@ -108,14 +130,11 @@ const CheckExchangeSection = ({
         </div>
 
         <div className="check-exchange-section__buttons">
-          <button
-            type="button"
-            onClick={onSave}
-            className="check-exchange-section__save button button--purple"
-          >
-            <img src={SaveIcon} alt="save" />
-            Зберегти
-          </button>
+          <Button
+            onClick={handleSaveClick}
+            status={saveStatus}
+            className="check-exchange-section__save"
+          />
 
           <div className="check-exchange-section__export-wrap">
             <button

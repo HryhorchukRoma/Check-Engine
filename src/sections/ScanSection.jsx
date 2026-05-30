@@ -14,6 +14,7 @@ const ScanSection = () => {
   const [photo, setPhoto] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("idle");
+  const [uploadText, setUploadText] = useState("Завантажте фото");
 
   const openCamera = async () => {
     try {
@@ -66,18 +67,35 @@ const ScanSection = () => {
   try {
     setIsUploading(true);
     setUploadStatus("uploading");
+    setUploadText("Завантаження...");
 
-    await receiptService.uploadReceipt(file);
+    const processingTimer = setTimeout(() => {
+      setUploadStatus("processing");
+      setUploadText("Розпізнавання...");
+    }, 900);
+
+    await receiptService.uploadReceipt(file, {
+      onUploadProgress: (progressEvent) => {
+        if (progressEvent.total && progressEvent.loaded >= progressEvent.total) {
+          setUploadStatus("processing");
+          setUploadText("Аналіз чеку...");
+        }
+      },
+    });
+
+    clearTimeout(processingTimer);
 
     setUploadStatus("success");
+    setUploadText("Завантажено");
 
     setTimeout(() => {
       window.location.reload();
-    }, 1000);
+    }, 1800);
   } catch (error) {
     console.error("Помилка завантаження:", error);
     alert(error.message || "Не вдалося завантажити чек.");
     setUploadStatus("idle");
+    setUploadText("Завантажте фото");
   } finally {
     setIsUploading(false);
     event.target.value = "";
@@ -93,7 +111,7 @@ const ScanSection = () => {
         disabled={isUploading}
       >
         <span className="scan-section__icon-box">
-          {uploadStatus === "uploading" && (
+          {(uploadStatus === "uploading" || uploadStatus === "processing") && (
             <span className="scan-section__loader" />
           )}
 
@@ -111,9 +129,7 @@ const ScanSection = () => {
         </span>
 
         <h2 className="scan-section__title">
-          {uploadStatus === "uploading" && "Завантаження..."}
-          {uploadStatus === "success" && "Завантажено"}
-          {uploadStatus === "idle" && "Завантажте фото"}
+            {uploadText}
         </h2>
       </button>
 

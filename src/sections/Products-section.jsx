@@ -40,14 +40,14 @@ const calculateLineTotal = (item) => {
     const unitPrice = toNumber(item.unit_price);
     const discount = toNumber(item.discount);
 
-    return Math.max(quantity * unitPrice + discount, 0);
+    return quantity * unitPrice + discount;
 };
 
 const normalizeItemForPatch = (item, index) => {
     const quantity = toNumber(item.quantity);
     const unitPrice = toNumber(item.unit_price);
     const discount = toNumber(item.discount);
-    const lineTotal = quantity * unitPrice;
+    const lineTotal = quantity * unitPrice + discount;
 
     return {
         ...(item.id ? { id: item.id } : {}),

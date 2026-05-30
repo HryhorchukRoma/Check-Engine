@@ -93,6 +93,13 @@ function normalizeReceiptItem(item, index) {
     const unitPrice = item.unit_price ?? item.unitPrice ?? "0.00";
     const discount = item.discount ?? "0.00";
 
+    const quantityNumber = Number(String(quantity).replace(",", "."));
+    const unitPriceNumber = Number(String(unitPrice).replace(",", "."));
+    const discountNumber = Number(String(discount).replace(",", "."));
+
+    const calculatedLineTotal =
+        quantityNumber * unitPriceNumber + discountNumber;
+
     return {
         ...(item.id ? { id: item.id } : {}),
 
@@ -104,7 +111,7 @@ function normalizeReceiptItem(item, index) {
         line_total: String(
             item.line_total ??
             item.lineTotal ??
-            (Number(quantity) * Number(unitPrice) - Number(discount)).toFixed(2)
+            calculatedLineTotal.toFixed(2)
         ),
 
         discount: String(discount),

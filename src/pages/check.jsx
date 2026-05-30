@@ -24,10 +24,38 @@ const Check = () => {
         setReceiptDraft(check);
     }, [check]);
 
+    const toNumber = (value) => {
+    const number = Number(String(value ?? "0").replace(",", "."));
+    return Number.isFinite(number) ? number : 0;
+};
+
+const calculateReceiptTotal = (items = []) => {
+    return items.reduce((sum, item) => {
+        const quantity = toNumber(item.quantity);
+        const unitPrice = toNumber(item.unit_price);
+        const discount = toNumber(item.discount);
+
+        const calculatedTotal = quantity * unitPrice + discount;
+
+        return sum + calculatedTotal;
+    }, 0);
+};
+
     const handleItemsChange = (updatedItems, removedItemId = null) => {
+    const totalAmount = calculateReceiptTotal(updatedItems).toFixed(2);
+
     setReceiptDraft((prev) => ({
         ...prev,
         items: updatedItems,
+        items_count: updatedItems.length,
+        total_amount: totalAmount,
+    }));
+
+    setCheck((prev) => ({
+        ...prev,
+        items: updatedItems,
+        items_count: updatedItems.length,
+        total_amount: totalAmount,
     }));
 
     if (removedItemId) {
@@ -38,17 +66,17 @@ const Check = () => {
     const handleSaveReceipt = async () => {
     if (!receiptDraft) return;
 
-    try {
-        await receiptService.updateReceipt(id, {
-            items: receiptDraft.items || [],
-            deletedItemIds,
-        });
+    const updatedReceipt = await receiptService.updateReceipt(id, {
+        items: receiptDraft.items || [],
+        deletedItemIds,
+        total_amount: receiptDraft.total_amount,
+    });
 
-        window.location.reload();
-    } catch (err) {
-        console.error(err);
-        alert(err.message || "Не вдалося зберегти зміни чеку.");
-    }
+    setCheck(updatedReceipt);
+    setReceiptDraft(updatedReceipt);
+    setDeletedItemIds([]);
+
+    return updatedReceipt;
 };
     useEffect(() => {
         const loadCheck = async () => {
