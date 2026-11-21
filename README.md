@@ -1,16 +1,66 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Check Engine
 
-Currently, two official plugins are available:
+Check Engine — вебзастосунок для роботи з електронними чеками, перегляду історії покупок та аналізу витрат.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Основні можливості
 
-## React Compiler
+- Перегляд і робота з чеками.
+- Перегляд історії чеків.
+- Аналіз витрат за допомогою графіків.
+- Обмін та експорт даних.
+- Інтерфейс для перегляду інформації про покупки.
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Технології
 
-## Expanding the ESLint configuration
+- React
+- JavaScript
+- Vite
+- React Router
+- Highcharts
+- SCSS
+- XLSX
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Встановлення та запуск
+
+1. Клонуйте репозиторій:
+
+   ```bash
+   git clone https://github.com/HryhorchukRoma/Check-Engine.git
+   ```
+
+2. Перейдіть до папки проєкту:
+
+   ```bash
+   cd Check-Engine
+   ```
+
+3. Встановіть залежності:
+
+   ```bash
+   npm install
+   ```
+
+4. Запустіть проєкт:
+
+   ```bash
+   npm run dev
+   ```
+
+## Збірка проєкту
+
+Для створення production-збірки виконайте:
+
+```bash
+npm run build
+```
+
+Для попереднього перегляду збірки:
+
+```bash
+npm run preview
+```
+
+## Репозиторій
+
+[Check Engine — GitHub](https://github.com/HryhorchukRoma/Check-Engine)
