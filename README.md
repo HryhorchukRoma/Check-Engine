@@ -64,3 +64,5 @@ npm run preview
 ## Репозиторій
 
 [Check Engine — GitHub](https://github.com/HryhorchukRoma/Check-Engine)
+
+<img width="567" height="1038" alt="image" src="https://github.com/user-attachments/assets/4bd81edd-56d5-465f-8d9d-2a7c1ccc7fa3" />
